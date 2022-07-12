@@ -21,8 +21,8 @@ const App = () =>
         .then((response) => response.json())
             .then((users) => setMonsters(users));
     }, []);
-    
 
+    
     useEffect(() => 
     {
         const newFilteredMonsters = monsters.filter((monster) =>
