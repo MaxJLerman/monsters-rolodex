@@ -6,8 +6,7 @@ import CardList from './components/card-list/card-list.component';
 
 // this is a functional component
 // as opposed to class components, with functional components the whole function gets called when React needs to update the page
-const App = () =>
-{
+const App = () => {
   const [searchField, setSearchField] = useState('');
   const [monsters, setMonsters] = useState([]);
 
