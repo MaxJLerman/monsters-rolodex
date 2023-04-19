@@ -1,21 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 
-import './App.css';
 import SearchBox from './components/search-box/search-box.component';
 import CardList from './components/card-list/card-list.component';
+import { getData } from './utils/data.utils';
+
+import './App.css';
+
+export type Monster = {
+  id: string;
+  name: string;
+  email: string;
+};
 
 // this is a functional component
 // as opposed to class components, with functional components the whole function gets called when React needs to update the page
 const App = () => {
-  const [searchField, setSearchField] = useState('');
-  const [monsters, setMonsters] = useState([]);
-  const [filteredMonsters, setFilteredMonsters] = useState(monsters);
+  const [searchField, setSearchField] = useState(''); // could also be useState<string>('') but as searchField gets initialised with an empty string, TS infers the type as string
+  const [monsters, setMonsters] = useState<Monster[]>([]); // must update the useState hook with the correct type
+  const [filteredMonsters, setFilteredMonsters] = useState(monsters); // therefore no explicit type definition is needed here because the type is inferred from the monsters array in the line above
 
   // useEffect only needs to be run once as empty array is passed meaning nothing will change; therefore never triggering the useEffect function again
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => response.json())
-        .then((users) => setMonsters(users));
+    const fetchUsers = async () => {
+      const users = await getData<Monster[]>('https://jsonplaceholder.typicode.com/users');
+      setMonsters(users);
+    };
+
+    fetchUsers(); // make sure to call the function inside the useEffect if it's defined as an async function
   }, []);
     
   useEffect(() => {
@@ -26,7 +37,7 @@ const App = () => {
     setFilteredMonsters(newFilteredMonsters);
   }, [monsters, searchField]);
 
-  const onSearchChange = (event) => {
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const searchField_string = event.target.value.toLocaleLowerCase();
     setSearchField(searchField_string);
   };
