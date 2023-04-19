@@ -4,49 +4,41 @@ import './App.css';
 import SearchBox from './components/search-box/search-box.component';
 import CardList from './components/card-list/card-list.component';
 
-
 // this is a functional component
 // as opposed to class components, with functional components the whole function gets called when React needs to update the page
-const App = () =>
-{
-    const [searchField, setSearchField] = useState('');
-    const [monsters, setMonsters] = useState([]);
-    const [filteredMonsters, setFilteredMonsters] = useState(monsters);
+const App = () => {
+  const [searchField, setSearchField] = useState('');
+  const [monsters, setMonsters] = useState([]);
+  const [filteredMonsters, setFilteredMonsters] = useState(monsters);
 
-
-    // useEffect only needs to be run once as empty array is passed meaning nothing will change; therefore never triggering the useEffect function again
-    useEffect(() =>
-    {
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then((response) => response.json())
-            .then((users) => setMonsters(users));
-    }, []);
-
+  // useEffect only needs to be run once as empty array is passed meaning nothing will change; therefore never triggering the useEffect function again
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => response.json())
+        .then((users) => setMonsters(users));
+  }, []);
     
-    useEffect(() => 
-    {
-        const newFilteredMonsters = monsters.filter((monster) =>
-        { return monster.name.toLocaleLowerCase().includes(searchField); });
+  useEffect(() => {
+    const newFilteredMonsters = monsters.filter((monster) => { 
+      return monster.name.toLocaleLowerCase().includes(searchField); 
+    });
 
-        setFilteredMonsters(newFilteredMonsters);
-    }, [monsters, searchField]);
+    setFilteredMonsters(newFilteredMonsters);
+  }, [monsters, searchField]);
 
+  const onSearchChange = (event) => {
+    const searchField_string = event.target.value.toLocaleLowerCase();
+    setSearchField(searchField_string);
+  };
 
-    const onSearchChange = (event) =>
-    {
-        const searchField_string = event.target.value.toLocaleLowerCase();
-        setSearchField(searchField_string);
-    }
-
-
-    return(
-        <div className="App">
-        <h1 className="app-title">Monsters Rolodex</h1>
-        <SearchBox className="monsters-search-box" onChangeHandler={onSearchChange} placeholder="search monsters" />
-        <CardList monsters={filteredMonsters} />
-        </div>
-    );
-}
+  return (
+    <div className="App">
+    <h1 className="app-title">Monsters Rolodex</h1>
+    <SearchBox className="monsters-search-box" onChangeHandler={onSearchChange} placeholder="search monsters" />
+    <CardList monsters={filteredMonsters} />
+    </div>
+  );
+};
 
 
 /*
