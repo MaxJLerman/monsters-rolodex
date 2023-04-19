@@ -1,12 +1,12 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEvent } from 'react';
 
 import './search-box.styles.css';
 
 type SearchBoxProps = {
   className: string;
   placeholder?: string;
-  onChangeHandler: ChangeEventHandler<HTMLInputElement>;
-};
+  onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void; // void type means that the function expects no return value
+}
 
 const SearchBox = ({ className, placeholder, onChangeHandler }: SearchBoxProps) => (
   <input 
